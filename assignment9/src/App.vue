@@ -20,31 +20,60 @@
 </template>
 
 <script>
+import { ref, computed, watch } from 'vue';
+
 export default {
-  data() {
-    return {
-      availableFunds: 100,
-      currentExpenses: 0,
-      enteredExpense: 0,
-    };
-  },
-  computed: {
-    remainingFunds() {
-      return this.availableFunds - this.currentExpenses;
-    },
-  },
-  methods: {
-    addExpense() {
-      this.currentExpenses += this.enteredExpense;
-    },
-  },
-  watch: {
-    remainingFunds(val) {
-      if (val < 0) {
+  setup() {
+    const availableFunds = 100;
+    const currentExpenses = ref(0);
+    const enteredExpense = ref(0);
+
+    const remainingFunds = computed(
+      () => availableFunds - currentExpenses.value
+    );
+
+    watch(remainingFunds, function (newValue) {
+      if (newValue < 0) {
         alert('You are broke!');
       }
-    },
+    });
+
+    function addExpense() {
+      currentExpenses.value += enteredExpense.value;
+    }
+
+    return {
+      availableFunds,
+      currentExpenses,
+      enteredExpense,
+      remainingFunds,
+      addExpense,
+    };
   },
+  // data() {
+  //   return {
+  //     availableFunds: 100,
+  //     currentExpenses: 0,
+  //     enteredExpense: 0,
+  //   };
+  // },
+  // computed: {
+  //   remainingFunds() {
+  //     return this.availableFunds - this.currentExpenses;
+  //   },
+  // },
+  // methods: {
+  //   addExpense() {
+  //     this.currentExpenses += this.enteredExpense;
+  //   },
+  // },
+  // watch: {
+  //   remainingFunds(val) {
+  //     if (val < 0) {
+  //       alert('You are broke!');
+  //     }
+  //   },
+  // },
 };
 </script>
 
